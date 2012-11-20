@@ -1,0 +1,30 @@
+ <?php
+//require_once dirname(__FILE__) . '/LoadAdressen.php';
+
+class Mailbox{
+ 	
+ 	function createMailbox($email){
+ 	
+ 	$at=strrpos($email, '@');
+  	$domain=substr($email,$at+1);
+  	$prefix=substr($email, 0, $at);
+  	
+  	echo $domain;
+  	echo $prefix; 
+  	$dir = "/home/vmail/$domain/$prefix";
+  	//Create the needed Maildir directories
+  //echo "Creating user directory /home/vmail/$domain/$prefix";
+  //maildirmake.dovecot does only chown on user directory, we'll create domain directory instead
+ if (! is_dir($dir)){
+            echo "hgooookd";
+   mkdir($dir);
+   chown (/home/vmail/$domain, 5000:5000);
+   chmod  (/home/vmail/$domain, 700);
+   // chown 5000:5000 /home/vmail/$domain
+   // chmod 700 /home/vmail/$domain	
+  		}
+  		}
+ }
+ 
+ 
+ ?>

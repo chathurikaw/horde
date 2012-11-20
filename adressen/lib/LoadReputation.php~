@@ -1,0 +1,123 @@
+<?php
+require_once("db_connect.inc");
+class IMP_LoadAdressen{
+       
+	function connectdb(){
+		mysql_connect('localhost', 'root', 'root');
+    		mysql_select_db("adressen");
+
+	}
+	
+	function load_score($user){
+
+               
+		$this->connectdb();
+    		$query = "SELECT total_score
+                  		FROM esrilanka_adressen_scores
+                 			WHERE user_id = '$user'
+               			";
+		 $res = mysql_query($query);
+		 $row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+		       $score=(float)$row["total_score"];
+		 }else{
+		       $score=0;
+		  }
+		return ($score*(16/10));
+
+	}
+
+       function get_num_votes($user){
+
+		$this->connectdb();
+    		$query = "SELECT count
+                  		FROM esrilanka_adressen_scores
+                 			WHERE user_id = '$user'
+               			";
+		 $res = mysql_query($query);
+		 $row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+		       $count=(int)$row["count"];
+		 }else{
+		       $count=0;
+		  }
+		return $count;
+
+	}
+
+	function get_positive_votes($user){
+		
+		$this->connectdb();
+    		$query = "SELECT positive_vote_count as cnt 
+				from esrilanka_adressen_scores 
+					where user_id='$user'";
+		 $res = mysql_query($query);
+		 $row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+		       $count=(int)$row["cnt"];
+		 }else{
+		       $count=0;
+		  }
+		return $count;
+
+
+	}
+
+	function get_negative_votes($user){
+		
+		$this->connectdb();
+    		$query = "SELECT negative_vote_count as cnt 
+				from esrilanka_adressen_scores 
+					where user_id='$user'";
+		 $res = mysql_query($query);
+		 $row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+		       $count=(int)$row["cnt"];
+		 }else{
+		       $count=0;
+		  }
+		return $count;
+
+
+	}
+
+         function get_neutral_votes($user){
+		
+		$this->connectdb();
+    		$query = "SELECT neutral_vote_count as cnt 
+				from esrilanka_adressen_scores 
+					where user_id='$user'";
+		 $res = mysql_query($query);
+		 $row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+		       $count=(int)$row["cnt"];
+		 }else{
+		       $count=0;
+		  }
+		return $count;
+
+
+	}
+
+	function findUID($fulluser){
+
+		$at='@';
+    		$colan=':';
+    		$iat=strrpos($fulluser, $at);
+    		$icolan=strrpos($fulluser, $colan);
+    		$user=null;
+    		if($icolan==false){
+			$user=substr($fulluser, 0, $iat);
+        
+		}else{
+        		$user=substr($fulluser, 4, $iat-4);
+    		}
+
+		return $user;
+	}
+
+
+
+}
+
+?>

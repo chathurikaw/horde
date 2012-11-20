@@ -1,0 +1,162 @@
+<?php
+require_once("db_connect.inc");
+
+class IMP_ComposeAdressen{
+	
+	function connectdb(){
+		mysql_connect('localhost', 'root', 'root');
+    		mysql_select_db("adressen");
+
+	}
+
+
+	function getCount($user){
+		$count=0;
+		$get_count_query="SELECT COUNT(*) as cnt from esrilanka_adressen_details where user_id='$user' AND type IN ('Positive','Negative')";
+		$res = mysql_query($get_count_query);
+		$row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+			$count=(int)$row["cnt"];
+		       
+		 }
+		return $count;
+	}
+
+        function getTotalCount($user){
+		$Tcount=0;
+		$get_Tcount_query="SELECT COUNT(*) as cnt from esrilanka_adressen_details where user_id='$user' AND type IN ('Positive','Negative','Neutral')";
+		$res = mysql_query($get_Tcount_query);
+		$row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+			$Tcount=(int)$row["cnt"];
+		       
+		 }
+		return $Tcount;
+	}
+
+	function getTotal($user){
+		$t_score=0;
+		$get_total_query="SELECT sum(mapped_point) as total from esrilanka_adressen_details where user_id='$user' AND type IN ('Positive','Negative')";
+		$res = mysql_query($get_total_query);
+		$row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+			$t_score=(float)$row["total"];
+		       
+		 }
+		return $t_score;
+
+	}
+
+	function getPositiveCount($user){
+
+		$p_votes=0;
+		$get_pvote_query="SELECT count(type) as p_votes from esrilanka_adressen_details where user_id='$user' AND type='Positive'";
+		$res = mysql_query($get_pvote_query);
+		$row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+			$p_votes=(int)$row["p_votes"];
+		       
+		 }
+		return $p_votes;
+	}
+
+	function getNegativeCount($user){
+
+		$n_votes=0;
+		$get_nvote_query="SELECT count(type) as n_votes from esrilanka_adressen_details where user_id='$user' AND type='Negative'";
+		$res = mysql_query($get_nvote_query);
+		$row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+			$n_votes=(int)$row["n_votes"];
+		       
+		 }
+		return $n_votes;
+	}
+
+        function getNeutralCount($user){
+
+		$nu_votes=0;
+		$get_nuvote_query="SELECT count(type) as nu_votes from esrilanka_adressen_details where user_id='$user' AND type='Neutral'";
+		$res = mysql_query($get_nuvote_query);
+		$row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+			$nu_votes=(int)$row["nu_votes"];
+		       
+		 }
+                 
+		return $nu_votes;
+	}
+
+
+	function compute($user,$point){
+		
+		$new=0;
+
+		$at='@';
+    		$iat=strrpos($user,$at);
+		$u=substr($user,0,$iat);
+
+		
+		
+		$this->connectdb();
+		$get_score_query = "SELECT total_score,count,avg_score
+                  		FROM esrilanka_adressen_scores
+                 			WHERE user_id = '$u'
+               			";
+		 $res = mysql_query($get_score_query);
+		 $row = mysql_fetch_assoc($res);
+		 if(mysql_num_rows($res)>0){
+			
+			$t_score=(float)$row["total_score"];
+			$count=(int)$row["count"];
+		       	$a_score=(float)$row["avg_score"];
+		 }else{
+
+			$new=1;
+		}
+
+
+		$count=$this->getCount($user);
+
+                $Tcount=$this->getTotalCount($user);
+
+		$t_score=$this->getTotal($user);
+
+		$p_votes=$this->getPositiveCount($user);
+
+		$n_votes=$this->getNegativeCount($user);
+
+                $nu_votes=$this->getNeutralCount($user);
+               
+		
+		if($point==0 | $point==5 |$point==1){//positive or negative vote submitted
+
+                      
+			
+			$a_score=(float)$t_score/$count;
+			
+			/*  Update adressen score*/
+			if($new==0){
+				
+				$up_query="UPDATE esrilanka_adressen_scores set total_score=$t_score,count=$Tcount,avg_score=$a_score,positive_vote_count=$p_votes,negative_vote_count=$n_votes,neutral_vote_count=$nu_votes WHERE user_id = '$u'";
+				mysql_query($up_query);
+
+			}else{/* This is the first vote, insert to the table*/
+				
+				$in_query="INSERT INTO esrilanka_adressen_scores 
+						(user_id,total_score,count,avg_score,positive_vote_count,negative_vote_count,,neutral_vote_count) VALUES('$u',$t_score,$Tcount,$a_score,$p_votes,$n_votes,$nu_votes)";
+				mysql_query($in_query);
+
+			}
+			
+		}
+
+            
+			
+		
+	}
+
+}
+
+
+?>

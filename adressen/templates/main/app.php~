@@ -1,0 +1,6 @@
+<?php
+
+$create_submit = Util::getFormData('create_submit', false);
+$formname = Util::getFormData('address', false);
+echo $formname;
+?>

@@ -1,0 +1,180 @@
+
+
+<?php
+/**
+ * Adressen index script.
+ 
+ *
+ * @author Your Name lakmali erandi baminiwatta
+ */
+
+
+require_once dirname(__FILE__) . '/lib/Application.php';
+include_once("domain_properties.conf");
+
+global $domain1, $domain2;
+
+//Horde_Registry::appInit('adressen');
+
+/* Verify if the search mode variable is passed in form or is
+ * registered in the session. Always use basic search by default. */
+if (Util::getFormData('rep_mode')) {
+    $_SESSION['adressen']['rep_mode'] = Util::getFormData('rep_mode');
+}
+if (!isset($_SESSION['adressen']['rep_mode'])) {
+    $_SESSION['adressen']['rep_mode'] = 'request';
+}
+
+$title = _("My Adressen");
+
+
+
+// Has the user submitted the form yet?
+    $submit = Util::getFormData('submit', false);
+    $request_submit = Util::getFormData('request_submit', false);
+    if($request_submit){
+
+     $email_adds=Util::getFormData('Taddresses', false);
+      $userid = Util::getFormData('userid', false);
+
+     $tokenized_adds =array();
+
+     $tok=null;
+
+     $tok=strtok($email_adds,",");// tokenize by comma
+
+    $i=0;
+     while($tok!==false){ //add all tokens to an array
+            $tokenized_adds[$i]=$tok;
+            $tok=strtok(",");
+            $i++;
+
+      }
+
+
+   foreach($tokenized_adds as $emalilId){
+      //send email to $adds
+
+
+
+      //echo $adds."  $userid<br>";
+
+      $url1='http://192.248.15.238/horde/adressen/submit_adressen.php?text1='.$userid.'&text2='.$emalilId.'&text3=5';
+       $url2='http://192.248.15.238/horde/adressen/submit_adressen.php?text1='.$userid.'&text2='.$emalilId.'&text3=1';
+ $url3='http://192.248.15.238/horde/adressen/submit_adressen.php?text1='.$userid.'&text2='.$emalilId.'&text3=0';
+      $headers = 'MIME-Version: 1.0' . "\r\n";
+      $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+      
+      $message1='<html>
+								
+								<body>
+
+<div id="title" style="background:#FBA208;font-size: 16px; font-weight: bold;padding: 7px 15px;">e-Srilanka Request for recommendation.</div>
+<div style="background:#FFFFCC;font-size: 16px;">
+<br><br>
+<b>'. $userid .'</b> requests your recomendation.<br>Please use the feedback form below to submit your feedback.
+<br><br><br>
+
+</div>
+								
+
+								</body>
+							</html>';
+
+
+      $message2 = '<html>
+
+								<body>
+
+<div id="title" style="background:#FBA208;font-size: 16px; font-weight: bold;padding: 7px 15px;">e-Srilanka Request for recommendation</div>
+<div style="background:#FFFFCC;font-size: 16px;">
+<br><br>
+<b>'. $userid .'</b> requests your recomendation.<br>Please use the feedback form below to submit your feedback.
+<br><br><br>
+
+<br><br>
+
+<a href="'.$url1.'" style="border: 1px solid rgb(196, 59, 40); padding: 7px 15px; display: inline-block; background-color: #FBA208; color: #570D00; font-size: 16px; font-weight: bold; white-space: nowrap; text-decoration: none;">Positive</a>
+
+<a href="'.$url2.'" style="border: 1px solid rgb(196, 59, 40); padding: 7px 15px; display: inline-block; background-color: #FBA208; color: #570D00; font-size: 16px; font-weight: bold; white-space: nowrap; text-decoration: none;">Neutral</a>
+
+<a href="'.$url3.'" style="border: 1px solid rgb(196, 59, 40); padding: 7px 15px; display: inline-block; background-color: #FBA208; color: #570D00; font-size: 16px; font-weight: bold; white-space: nowrap; text-decoration: none;">Negative</a>
+ 
+								
+</div>
+								</body>
+
+							</html>';
+
+
+
+
+        $iat=strpos($emalilId,'@');
+
+        $domain=substr($emalilId,$iat+1);
+        
+        if($domain=="example.com" | ){
+               
+               mail($emalilId,"E-SriLanka-Request for recommendation",$message1,$headers);
+
+
+       }else{
+              mail($emalilId,"E-SriLanka-Request for recommendation",$message2,$headers);
+
+
+        }
+
+	
+   }  
+
+    
+
+
+
+
+
+
+     }
+// Extract userid to be shown in the username field.
+if (empty($userid)) {
+    if ($conf['hooks']['default_username']) {
+        $userid = Horde::callHook('_passwd_hook_default_username',
+                                  array(Auth::getAuth()),
+                                  'passwd');
+    } elseif ($conf['hooks']['full_name']) {
+        $userid = Auth::getAuth();
+    } else {
+        $userid = Auth::getBareAuth();
+    }
+    if (is_a($userid, 'PEAR_Error')) {
+        Horde::logMessage($userid, __FILE__, __LINE__);
+        $userid = '';
+    }
+}
+
+require_once dirname(__FILE__) . '/lib/LoadAdressen.php';
+$rep_ob=new IMP_LoadAdressen();
+
+$u=$rep_ob->findUID($userid);
+	
+$score=$rep_ob->load_score($u);
+$count=$rep_ob->get_num_votes($u);
+$p_votes=$rep_ob->get_positive_votes($ud);
+$n_votes=$rep_ob->get_negative_votes($u);
+$nu_votes=$rep_ob->get_neutral_votes($u);
+
+if($score>=0){
+	$is_positive=true;
+}else{
+	$is_positive=false;
+	$score=$score*(-1);	
+}
+
+require ADRESSEN_TEMPLATES . '/common-header.inc';
+
+//echo Horde::menu();
+
+$notification->notify(array('listeners' => 'status'));
+
+require ADRESSEN_TEMPLATES . '/main/main.inc';
+require $registry->get('templates', 'horde') . '/common-footer.inc';

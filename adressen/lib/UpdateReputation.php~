@@ -1,0 +1,44 @@
+<?php
+
+require_once("db_connect.inc");
+
+class IMP_UpdateAdressen{
+	function connectdb(){
+		mysql_connect('localhost', 'root', 'root');
+    		mysql_select_db("adressen");
+
+	}
+
+	function update($by,$user,$point,$m_point,$feedback){
+                
+		$this->connectdb();
+    		$query = "SELECT id
+                  		FROM external_adressen_details
+                 			WHERE user_id = '$user' and reputed_by ='$by'
+               			";
+		$res = mysql_query($query);
+		$row = mysql_fetch_assoc($res);
+
+		if(mysql_num_rows($res)>0){/*  Update adressen score*/
+			
+		       $up_query = "UPDATE external_adressen_details
+                 			SET offered_point=$point,mapped_point=$m_point,type= '$feedback',date=NOW() WHERE user_id = '$user' and reputed_by ='$by'
+               			";
+			mysql_query($up_query);
+		}else{/* This is the first vote, insert to the table*/
+		      $in_query = "INSERT INTO external_adressen_details (user_id,reputed_by,offered_point,mapped_point,type,date)
+                 			VALUES ('$user','$by',$point,$m_point,'$feedback',NOW())
+               			";
+			mysql_query($in_query);
+		}
+
+
+
+
+
+	}
+
+
+}
+
+?>

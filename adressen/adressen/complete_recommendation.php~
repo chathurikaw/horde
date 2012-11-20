@@ -1,0 +1,62 @@
+<?php
+
+$uid=$_REQUEST['text1'];
+$by=$_REQUEST['text2'];
+$val=$_REQUEST['text3'];
+$point=$_REQUEST['text4'];
+
+if($val=="0"){
+	$feedback="Negative";
+}else if($val=="1"){
+	$feedback="Neutral";
+}else {
+	$feedback="Positive";
+}
+//echo "from:". $uid." user:". $by." points:".$point;
+
+
+
+//map to points
+//require_once './lib/FeedbackToPointMapping.php';
+//$map_to_point_ob=new IMP_FeedbackToPointMapping();
+//$m_point=$map_to_point_ob->mapPointMethod($by,$val,$point);
+
+//echo "      Mapped: ".$point;
+
+//update adressen
+require_once './lib/UpdateAdressen.php';
+$uprep_ob=new IMP_UpdateAdressen();
+$uprep_ob->update($by,$uid,$point,$m_point,$feedback);
+
+
+//compose score
+//require_once './lib/ComposeAdressen.php';
+//$uprep_ob=new IMP_ComposeAdressen();
+//$uprep_ob->compute($uid,$val);
+
+
+?>
+
+
+<html>
+<head>
+<title>Adressen :: Thank You
+</title>
+<link rel="stylesheet" type="text/css" href="style/style.css"/>
+</head>
+
+<body >
+<div id="wrap">
+<h2>e-SriLanka-Thank You!</h2>
+
+<div id="line"></div>
+<div id="combo">
+Thank You! You have recommended the user <b><?php echo $uid ?></b> with a <b><?php echo $feedback ?></b> feedback! </br><br>
+
+</div >
+
+</div>
+</body>
+
+</html>
+

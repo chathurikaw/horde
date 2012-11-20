@@ -1,0 +1,38 @@
+#radio_b,#combo,#button{
+
+	color:#990033;
+	
+	font-size:16;
+	 padding:10px;
+}
+h2{
+	
+	color:#990033;
+	padding:5px;
+}
+body{
+	font-family:"Palatino Linotype","Book Antiqua",Palatino,serif;
+	background: none repeat scroll 0 0 #570D00;
+}
+#line{
+
+background: none repeat scroll 0 0 #F2A322;
+    height: 30px;
+    line-height: 30px;
+
+}s
+#wrap{
+
+	background: none repeat scroll 0 0 #FFFFFF;
+    border: 10px solid #F2A322;
+    margin: 40px auto;
+    width: 780px;
+   
+    
+}
+
+#fb,#brecommend,#bcancel{
+	background: none repeat scroll 0 0 #FFFFCC;
+	color: #570D00;
+	border: 1px solid #570D00;
+}

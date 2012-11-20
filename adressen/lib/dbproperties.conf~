@@ -1,0 +1,12 @@
+<?php
+
+
+$ADRESSEN_DB= "adressen";
+$USERS_DBUSER = "root";
+$USERS_DBPASS = "123";
+$USERS_DBHOST = "localhost";
+
+
+
+
+?>

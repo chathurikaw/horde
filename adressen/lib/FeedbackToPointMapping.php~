@@ -1,0 +1,153 @@
+<?php
+include_once("AdressenProperties.conf");
+class IMP_FeedbackToPointMapping{
+
+	function connectdb(){
+		mysql_connect('localhost', 'root', 'root');
+    		mysql_select_db("adressen");
+
+	}
+
+	function mapPointMethod($from,$val,$point){
+		$this->connectdb();
+		if($val==5){
+			$score_of_provider=$this->mapPositiveVote($from);
+			if($score_of_provider<=0){//If the recommendation provider's score <=0, cosider it as 1.
+				$score_of_provider=1;
+				}
+			$final_point=(float)($score_of_provider*$point/5);
+
+		}else if($val==0){
+			$user=$this->getUser($from);
+			$final_point=$this->mapNegativeVote($point,$user);
+		}else if($val==1){
+			$score_of_provider=$val;
+			$final_point=0;
+
+		}
+		
+
+		return $final_point;
+	
+	
+	}
+
+
+	function mapPositiveVote($from){
+
+		$user=$this->getUser($from);
+		
+		$score_query="select avg_score from esrilanka_adressen_scores where user_id='".$user."'";
+		
+		$res = mysql_query($score_query);
+		$row = mysql_fetch_assoc($res);
+
+		if(mysql_num_rows($res)>0){
+
+			$score_of_provider=(float)$row["avg_score"];
+		}else{
+
+			$score_of_provider=0;
+		}
+		return $score_of_provider;
+
+	}
+
+	function getProviderScore($user){
+
+		
+		
+		$score_query="select avg_score from esrilanka_adressen_scores where user_id='".$user."'";
+		
+		$res = mysql_query($score_query);
+		$row = mysql_fetch_assoc($res);
+
+		if(mysql_num_rows($res)>0){
+
+			$score_of_provider=(float)$row["avg_score"];
+		}else{
+
+			$score_of_provider=0;
+		}
+
+		if($score_of_provider<=0){//If the recommendation provider's score <=0, cosider it as 1.
+				$score_of_provider=1;
+				}
+		return $score_of_provider;
+
+	}
+
+
+	function mapNegativeVote($point,$user){
+		global $MIN_VOTE_LEAD,$MIN_VOTE_LEAD_REDUCTION, $MONTH_DURATION, $MIN_NEGATIVE_VOTES, $MIN_NEGATIVE_VOTE_SCORE;
+		$min_lead=$MIN_VOTE_LEAD;
+
+		$lead_red_score=$MIN_VOTE_LEAD_REDUCTION;
+
+		$time_duration=$MONTH_DURATION;
+
+		$min_negative_votes=$MIN_NEGATIVE_VOTES;
+
+		$recent_negative_vote_red_score=$MIN_NEGATIVE_VOTE_SCORE;
+
+		
+		$extra_reduction=0;
+		
+		$score_of_provider=$this->getProviderScore($user);
+
+		$cur_point=(float)($score_of_provider*$point/5);
+			
+		$query="select negative_vote_count from esrilanka_adressen_scores where user_id='".$user."'";
+		$res = mysql_query($query);
+		$row = mysql_fetch_assoc($res);
+			
+		if(mysql_num_rows($res)>0){
+			
+			$negative_count=(float)$row["negative_vote_count"];
+			
+		}
+
+		$query="select positive_vote_count from esrilanka_adressen_scores where user_id='lakmali'";
+		$res = mysql_query($query);
+		$row = mysql_fetch_assoc($res);
+
+		if(mysql_num_rows($res)>0){
+			
+			$positive_count=(float)$row["positive_vote_count"];
+			
+		}
+
+		$diff=$negative_count-$positive_count;
+		
+		if($diff>=$min_lead){
+			$extra_reduction=$lead_red_score;
+	
+		}
+		
+		//$cur_date->new Date();
+		
+
+		$final_point=$cur_point+$extra_reduction;
+		
+		return $final_point;
+		
+
+		
+		
+
+	}
+
+	function getUser($from){
+
+		$at='@';
+		$iat=strrpos($from,'@');
+		$fromad=substr($from,0,$iat);
+
+		return $fromad;
+
+		}
+
+}
+
+
+?>

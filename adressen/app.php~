@@ -1,0 +1,118 @@
+<script type="text/javascript">
+
+
+function submit_form()
+{
+   return true;
+}
+
+function setFocus()
+{
+    
+}
+
+//-->
+</script>
+
+
+
+
+<div id="dhtmltooltip"></div>
+
+<style type="text/css">
+
+
+#dhtmltooltip{
+position: absolute;
+border: 5px solid #ffffff;
+padding: 10px;
+background: none repeat scroll 0 0 #ffc;
+visibility: hidden;
+z-index: 100;
+filter: progid:DXImageTransform.Microsoft.Shadow(color=white,direction=115);
+}
+
+th{background-color:LightBlue; font-color:black; font-size:12pt;}
+td{background-color:white;}
+p{color:black;}
+input{backgroung-color:white;}
+
+#wrap{
+	padding: 30px;
+
+}
+
+</style>
+
+
+
+<div id="menu">
+<?php
+require_once dirname(__FILE__) . '/lib/Application.php';
+Horde::addScriptFile('stripe.js', 'horde', true);
+require_once 'Horde/Menu.php';
+$menu = &new Menu(HORDE_MENU_MASK_ALL & ~HORDE_MENU_MASK_PREFS);
+echo $menu->render();
+$item = 1;
+?>
+</div>
+
+<?php
+
+
+/* Build search mode tabs. */
+require_once 'Horde/UI/Tabs.php';
+require_once 'Horde/Variables.php';
+$j = 0;
+$sUrl = Horde::applicationUrl('list.php');
+$vars = Variables::getDefaultVariables();
+$tabs = new Horde_UI_Tabs('addr_mode', $vars);
+$tabs->addTab(_("Create New Address"), $sUrl, 'create');
+$tabs->addTab(_("View Adresses"), $sUrl, 'my_addr');
+echo $tabs->render($_SESSION['adressen']['addr_mode']);
+
+?>
+
+
+<?php
+
+$create_submit = Util::getFormData('create_submit', false);
+$formname = Util::getFormData('address', false);
+echo $formname;
+?>
+
+<?php if ($formname == 'single'):?>
+
+<div id="wrap">
+<br><br>
+   <form name="create_single" method="post"  action="<?php echo Horde::applicationUrl('list.php', false, -1, true) ?>">
+   <?php echo Util::formInput() ?>
+<p>email prefix: (Without @DomainName) Your Domain = <?php echo $d[$domain] ?></p><input type="text" name="email" color="white"/>
+<br><br>
+<p>Contact / Group name: </p> 
+<input type="text" name="contact_name" color="white"/>
+<br><br>
+<p>Contact email address: </p><input type="text" name="contact_email" color="white"/>
+<br><br>
+<p>Mailbox: </p> 
+<select name="mailbox" class="dropdownmenus" value="Select me" onchange='this.form.elements['showuserid'].value=this.options[this.selectedIndex].value'>
+	<option selected> Select Mailbox </option>
+	<?
+	 
+	    while ($row = mysql_fetch_array($mailbox)) {
+	    extract($row);
+	 
+	    echo "<option value='".$row['d_add']."'>".$row['d_add']."</option>";
+	 
+	    }
+	?>
+	<option name=create_mailbox value='new'> Create new Mailbox </option>
+	</select>
+<br><br>
+
+<input type="submit" id="bsubmit" name="request_submit" value="Submit" class="button" /> </tab>
+<input type="reset" id="bclear" name="clear" value="Clear" class="button" />
+</form>
+</div>
+
+<?php endif; ?>

@@ -1,0 +1,54 @@
+<?php
+/**
+ * Release focus. Possible values:
+ * Horde_Release::FOCUS_INITIAL - Initial announcement
+ * Horde_Release::FOCUS_MINORFEATURE - Minor feature enhancement
+ * Horde_Release::FOCUS_MAJORFEATURE - Major feature enhancement
+ * Horde_Release::FOCUS_MINORBUG - Minor bugfixes
+ * Horde_Release::FOCUS_MAJORBUG - Major bugfixes
+ * Horde_Release::FOCUS_MINORSECURITY - Minor security fixes
+ * Horde_Release::FOCUS_MAJORSECURITY - Major security fixes
+ * Horde_Release::FOCUS_DOCS - Documentation improvements
+ */
+$this->notes['fm']['focus'] = 0;
+
+/* Mailing list release notes. */
+$this->notes['ml']['changes'] = <<<ML
+The Horde Team is pleased to announce the final release of the Horde Groupware
+Webmail Edition version 1.2.6.
+
+Horde Groupware Webmail Edition is a free, enterprise ready, browser based
+communication suite. Users can read, send and organize email messages with
+three different webmail interfaces and manage and share calendars, contacts,
+tasks and notes with the standards compliant components from the Horde
+Project.
+
+The major changes compared to the Horde Groupware Webmail Edition version 1.2.5
+are:
+    * Synchronization improvements.
+    * Added a command line fetchmail script.
+    * Fixed synchronization when using realms.
+    * Improved Sieve support for Dovecot.
+    * Added support for composite header filter rules with IMAP backends.
+    * Only synchronize fields that are supported by the client.
+    * Add vCard 3.0 export.
+    * Minor alarm fixes.
+    * Further small bug fixes and feature enhancements.
+ML;
+
+/* Freshmeat release notes, not more than 600 characters. */
+$this->notes['fm']['changes'] = <<<FM
+Synchronization has been improved.
+A command line fetchmail script has been added.
+Synchronization when using realms has been fixed.
+The Sieve support for Dovecot has been improved.
+Support for composite header filter rules with IMAP backends has been added.
+Only address book fields that are supported by the client are synchronized now.
+vCard 3.0 export has been added.
+Minor alarm issues have been fixed.
+Further small bug fixes and improvements have been made.
+FM;
+
+$this->notes['name'] = 'Horde Groupware Webmail Edition';
+$this->notes['fm']['project'] = 'horde-webmail';
+$this->notes['fm']['branch'] = 'Default';

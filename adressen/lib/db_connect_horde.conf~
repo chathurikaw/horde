@@ -1,0 +1,18 @@
+<?php
+
+include_once("dbproperties_horde.conf");
+
+function connect_to_adressen_db() {
+  global $HORDE_DBHOST,$HORDE_DB, $HORDE_DBUSER, $HORDE_DBPASS;
+  if (!mysql_connect($HORDE_DBHOST, $HORDE_DBUSER, $HORDE_DBPASS)) {
+    // couldn't connect
+    echo "could not connect ($HORDE_DBHOST, $HORDE_DBUSER, $HORDE_DBPASS)"; 	
+  }
+  if (!mysql_select_db($HORDE_DB)) {
+    // couldn't connect
+    echo "could not select ($HORDE_DB)"; 	
+  }
+}
+
+
+?>

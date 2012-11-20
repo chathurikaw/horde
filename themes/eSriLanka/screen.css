@@ -1,0 +1,106 @@
+/**
+ * $Horde: horde/themes/eSriLanka/eSriLanka.css,v 1.0.0.0 2010/05/29 14:47:00 jan Exp $
+ */
+
+body {
+    background: #570D00;
+}
+body.sidebar {
+    background: #953A0B;
+}
+a {
+    color: #570D00;
+}
+a:hover {
+    color: #fb9108;
+}
+.header {
+    color: #fff;
+    background: #953A0B;
+}
+.header a {
+    color: #fff;
+}
+.smallheader {
+    background: #953A0B;
+}
+.light {
+    color: #fff;
+}
+.control {
+    background: #ffd368;
+}
+.item {
+    background: #f4d793;
+}
+.button {
+    color: #000;
+    background-color: #fba208;
+    border-bottom: 1px solid #f7e0aa;
+    border-right: 1px solid #f7e0aa;
+    border-top: 1px solid #ffd368;
+    border-left: 1px solid #ffd368;
+}
+.selected {
+    background-color: #f5c144;
+}
+
+/* Menu styles. */
+#menu {
+    color: #fff;
+    background: #953A0B;
+}
+#menu a {
+    color: #fff;
+}
+#menu a.current {
+    background: #570D00;
+    color: #ccc;
+}
+
+/* Sidebar styles. */
+#sidebarPanel {
+    background: #953A0B;
+    border: 2px solid #570D00;
+}
+#sidebarPanel a {
+    color: #fff;
+    /*border: 1px solid #570D00;*/
+    padding-left: 1px;
+    padding-bottom: 2px;
+}
+#sidebarPanel a:hover {
+    color: #000;
+    background-color: #ccc;
+    border: 1px solid #000;
+    text-decoration: none;
+}
+
+#sidebarPanel a, #sidebarPanel span {
+  color:#fff;
+  font-size:90%;
+  text-decoration:none;
+  white-space:pre;
+}
+
+
+
+/* Preferences overview. */
+.prefsOverview h2 {
+    color: #fff;
+}
+
+/* Tab styles. */
+.tabset li a {
+    color: #000;
+    background-color: #ffd368;
+    border-bottom-color: #000;
+}
+.tabset li a:hover {
+    background-color: #ffd368;
+}
+.tabset li.activeTab a {
+    border-bottom: 1px solid #FFD368;
+    background-color: #E1840C;
+    color: #000000;
+}

@@ -1,0 +1,9 @@
+<?php
+/**
+ * Adressen index script.
+ 
+ *
+ * @author Your Name chathurika priyadarshani wijayawardana
+ */
+
+require '/var/www/html/horde/adressen/list.php';

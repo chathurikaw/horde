@@ -1,0 +1,15 @@
+<?php
+/* CONFIG START. DO NOT CHANGE ANYTHING IN OR AFTER THIS LINE. */
+$conf['storage']['params']['table'] = 'virtual_users';
+$conf['storage']['params']['driverconfig'] = 'horde';
+$conf['storage']['driver'] = 'sql';
+$conf['menu']['apps'] = array('adressen');
+$conf['hooks']['full_name'] = true;
+$conf['sql']['username'] = 'root';
+$conf['sql']['password'] = '123';
+$conf['sql']['hostspec'] = 'localhost';
+$conf['sql']['port'] = 3306;
+$conf['sql']['protocol'] = 'tcp';
+$conf['sql']['database'] = 'horde';
+$conf['sql']['ssl'] = true;
+/* CONFIG END. DO NOT CHANGE ANYTHING IN OR BEFORE THIS LINE. */
