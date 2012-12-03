@@ -137,6 +137,6 @@ if($delete){
 	$addresses = Util::getFormData('check', false);
 	if($addresses){		
 	Delete_Alias::deleteAddress($addresses, $userid);}
-	else {echo "<script type='text/javascript'>window.alert('No Addresses are selected to delete');</script>";}
+	else {echo "<script type='text/javascript'>window.alert('No Addresses to delete');</script>";}
 	
 }

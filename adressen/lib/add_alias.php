@@ -266,6 +266,8 @@ _horde_setPreference($app, 'identities', $arr);
 }
 
 
+
+
 function fetchDomainID($dom){
 $dquery = "SELECT id
 FROM mailserver.virtual_domains
@@ -284,7 +286,7 @@ function fetchGroupID($userid,$grp){
 
 $gquery = "SELECT group_id
 FROM adressen.groups
-WHERE group_name = '$grp' and owner='$userid'
+WHERE dis_add = '$grp' and owner='$userid'
 ";
                
                 $res = mysql_query($gquery);

@@ -181,12 +181,11 @@ echo $tabs->render($_SESSION['adressen']['addr_mode']);
   		}
   		if($j==0){echo "No addresses are created yet";}
   		
-			echo "</table>";
-			if($j!=0){	
+			echo "</table>";	
 echo "<input type='Submit' id='bedit' name='request_edit' value='Edit' class='button'/>";
 echo "<input type='submit' id='bdelete' name='delete' value='Delete' class='button'/>";
   		
-}
+
 ?>
 
 

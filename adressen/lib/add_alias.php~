@@ -266,6 +266,8 @@ _horde_setPreference($app, 'identities', $arr);
 }
 
 
+
+
 function fetchDomainID($dom){
 $dquery = "SELECT id
 FROM mailserver.virtual_domains
