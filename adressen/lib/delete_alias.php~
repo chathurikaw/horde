@@ -1,11 +1,17 @@
 <?php 
-
+/**
+ * Address deleting script.
+ 
+ *
+ * @author chathurika priyadarshani wijayawardana
+ */
 require_once("db_connect.inc");
 require_once dirname(__FILE__) . '/LoadAdressen.php';
 require_once dirname(__FILE__) . '/add_alias.php';
 
 class Delete_Alias {
 
+//delete the alias
 function deleteAddress($addresses, $user_id){
     		connect_to_db();
     foreach($addresses as $a){
@@ -48,7 +54,7 @@ function deleteAddress($addresses, $user_id){
     
 }
 
-
+//delete server records
 function clearServer($user, $domain, $address){
 	 
           $delete_user = "DELETE FROM mailserver.virtual_users WHERE user = '$user' and domain_id = '$domain' ";

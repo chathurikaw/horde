@@ -1,4 +1,14 @@
+<?php
+/**
+ * Address creating form loading script.
+ 
+ *
+ * @author chathurika priyadarshani wijayawardana
+ */
+?>
 <script>
+//function to display atext field to add new contact
+//when creating email address(if the contact is not exist)
 function addContact(){
     selectedContact = document.getElementById('contact_name').value;
     if (selectedContact == 'newcon'){
@@ -6,6 +16,7 @@ function addContact(){
     }
 }
 
+//random generating addresss(user can define the letters to use)
 function createAddress()
 {
 web = document.getElementById('contact_name').value;
@@ -15,7 +26,7 @@ var name = prompt("Insert some letters to create address", web);
   else {randomString(name); }
 }
 
-
+//generate random string
 function randomString(chars) {
 	var string_length = chars.length;
 	var randomstring = '';
@@ -26,6 +37,7 @@ function randomString(chars) {
 	document.create.email.value = randomstring;
 }
 
+//generate random addresses
 function randomAddress() {
 	var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
 	var string_length = 8;
@@ -43,6 +55,7 @@ function randomAddress() {
 require_once("/var/www/html/horde/adressen/list.php");
 ?>
 <?php if ($formname == 'single'):?>
+<?php //load the form for single person address generating?>
 
 <div id="wrap">
 <br><br>
@@ -92,7 +105,7 @@ require_once("/var/www/html/horde/adressen/list.php");
 </div>
 
 <?php elseif ($formname == 'group'):?>
-
+<?php //load the form for group address generating?>
 <div id="wrap">
 <br><br>
    <form name="create" method="post"  action="<?php echo Horde::applicationUrl('list.php', false, -1, true) ?>">
@@ -142,6 +155,7 @@ require_once("/var/www/html/horde/adressen/list.php");
 </div>
 
 <?php elseif ($formname == 'website'):?>
+<?php //load the form for address generating for websites?>
 
 <div id="wrap">
 <br><br>
@@ -180,6 +194,7 @@ require_once("/var/www/html/horde/adressen/list.php");
 
 
 <?php elseif ($formname == 'company'):?>
+<?php //load the form for address generating for company domains?>
 
 <div id="wrap">
 <br><br>

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Detail loading script.
+ 
+ *
+ * @author chathurika priyadarshani wijayawardana
+ */
 require_once("db_connect.inc");
 require_once("/var/www/html/horde/lib/Horde/Identity.php");
 require_once("/var/www/html/horde/imp/lib/Mailbox.php");
@@ -7,6 +13,7 @@ require_once("/var/www/html/horde/imp/lib/Fetchmail.php");
 
 class IMP_LoadAdressen{
        
+       //get the domain of the current user
        function getDomain(){
 	
 		$id = new identity();
@@ -17,10 +24,9 @@ class IMP_LoadAdressen{
   		
 	}
        
+       //get the password of the user
        function getpassword($user, $domid){
-    //   echo $user;
-     //  echo $domid;
-       	$passquery = "SELECT password
+     	$passquery = "SELECT password
                   		FROM mailserver.virtual_users
                  			WHERE user = '$user' and domain_id = '$domid'
                			";
@@ -31,7 +37,7 @@ class IMP_LoadAdressen{
        
        }
        
-       
+       //get the disposable addresses created by the user
        function get_addresses($user){
               
        	connect_to_db();
@@ -68,7 +74,7 @@ class IMP_LoadAdressen{
 			return $add;	
        }
        
-	
+	//get the group address details
 	function getGroups($user){
 		connect_to_db();
        	if (!mysql_select_db('adressen'))
@@ -103,6 +109,7 @@ class IMP_LoadAdressen{
 	
 	}
 	
+	//get the domain details
 	function getDomains($user){
 		connect_to_db();
        	if (!mysql_select_db('adressen'))
@@ -137,7 +144,7 @@ class IMP_LoadAdressen{
 	
 	}
 	
-	
+	//get the mailboxes owned by user
 	function get_mailboxes($user){
 		connect_to_db();
        		if (!mysql_select_db('adressen'))
@@ -164,7 +171,7 @@ class IMP_LoadAdressen{
 	}
 	
 	
-	
+	//get the contacts from users contact book
 	function get_contacts(){
 	    $id = new identity();
   	    $user = $id->_user;		            
@@ -183,9 +190,7 @@ class IMP_LoadAdressen{
              return $con;
 	}
 
-
-
-
+        //find the username of the user
 	function findUID($fulluser){
 		$at='@';
     		$colan=':';
@@ -211,41 +216,49 @@ class IMP_LoadAdressen{
 		return $user;
 	}
 
-
-
-function get_email($user){
-          // echo $user;   
-       	connect_to_db();
-       	if (!mysql_select_db('adressen'))
-       	{
-       		echo "could not select ('adressen db')";
-       	}
-       		// select addresses to be viewed
-       		$emquery = "SELECT d_add
-                  		FROM adressen.dis_addresses
-                 			WHERE owner = '$user'
-               			";
-               			
-               	$res = mysql_query($emquery);
-             //  	echo "fssssgsf";
-               	$rows = array();
-               	$add = array();
-               	$i = 0;
-               	$k = 0;
-               	
-               	
-               		while($row = mysql_fetch_array($res))
-                  {
-  		    
-  		    $rows = $row;
-  		    
-  		    $add[$i] = $rows[d_add];
-  		    $i = $i +1;
-  		    
-  		  //  echo $add[$i];
-  		}		
-                 	
-			return $add;	
-       }
+	//get single contact emails created by user
+	function get_email($user){
+		  // echo $user;   
+	       	connect_to_db();
+	       	if (!mysql_select_db('adressen'))
+	       	{
+	       		echo "could not select ('adressen db')";
+	       	}
+	       		// select addresses to be viewed
+	       		$emquery = "SELECT d_add
+		          		FROM adressen.dis_addresses
+		         			WHERE owner = '$user'
+		       			";
+		       			
+		       	$res = mysql_query($emquery);
+		       	$rows = array();
+		       	$add = array();
+		       	$i = 0;
+		       	$k = 0;
+		       	
+		       	
+		       		while($row = mysql_fetch_array($res))
+		          {
+	  		    
+	  		    $rows = $row;
+	  		    
+	  		    $add[$i] = $rows[d_add];
+	  		    $i = $i +1;
+	  		    
+	  		}		
+		         	
+				return $add;	
+	       }
+	  
+	  //get the related contact for a given email     
+	 function get_contact_details($address, $user){
+	       connect_to_db();
+	       $quc = "SELECT email FROM adressen.dis_addresses WHERE d_add = '$address' AND owner='$user'";
+	       $con = mysql_query($quc);
+	       $drowp = mysql_fetch_assoc($con);
+	       $contact = $drowp[email];    
+	       return $contact;
+	 }
+       
 }
 ?>

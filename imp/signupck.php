@@ -1,6 +1,11 @@
 <?
 
-
+/**
+ * Sign up script.
+ 
+ *
+ * @author chathurika priyadarshani wijayawardana
+ */
 require_once("/var/www/html/horde/adressen/lib/db_connect.inc");
 require_once("/var/www/html/horde/adressen/lib/add_alias.php");
 
@@ -21,25 +26,29 @@ connect_to_db();
        	}
 
 
-// if userid is less than 3 char then status is not ok
+
 if(!isset($domainname) or strlen($username)==0){
 $msg=$msg."Please enter the domain name<BR>";
 
 $status= "NOTOK";}
 
+//Should use different domain by each user
 else if(mysql_num_rows(mysql_query("SELECT name FROM virtual_domains WHERE name = '$domainname'"))){
 $msg=$msg."Domain name already exists. Please try another one<BR>";
 echo "<script type='text/javascript'>no_domain();</script>";
 $status= "NOTOK";}
 
+// if userid is less than 3 char then status is not ok
 else if(!isset($username) or strlen($username) <3){
 $msg=$msg."Username should be =3 or more than 3 char length<BR>";
 $status= "NOTOK";}					
 
+//password length should be mmore than 3 characters.
 else if ( strlen($password) < 3 ){
 $msg=$msg."Password must be more than 3 char legth<BR>";
 $status= "NOTOK";}					
 
+//password should be matched
 else if ( $password <> $password2 ){
 $msg=$msg."Both passwords are not matching<BR>";
 $status= "NOTOK";}					
@@ -67,7 +76,6 @@ echo "<font face='Verdana' size='3' color=green>Welcome, You have successfully s
 else{ echo "Database Problem, please contact Site admin</font><br><input type='button' value='Retry' onClick='history.go(-1)'>";
 
 
-//echo mysql_error();
 
 }
 }

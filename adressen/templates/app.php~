@@ -1,4 +1,14 @@
+<?php
+/**
+ * Address creating form loading script.
+ 
+ *
+ * @author chathurika priyadarshani wijayawardana
+ */
+?>
 <script>
+//function to display atext field to add new contact
+//when creating email address(if the contact is not exist)
 function addContact(){
     selectedContact = document.getElementById('contact_name').value;
     if (selectedContact == 'newcon'){
